@@ -5,6 +5,7 @@ import { fetchNotebook, selectNote } from '../features/ntoes/noteSlice'
 import { fetchSectionsList } from '../features/sections/sectionSlice'
 import PagesList from '../features/pages/PagesList'
 import SectionsList from '../features/sections/SectionsList'
+import Editor from '../features/editor/Editor'
 
 const Home: React.VFC = () => {
   const dispatch = useDispatch()
@@ -26,7 +27,7 @@ const Home: React.VFC = () => {
       <div className="home d-flex">
         <SectionsList />
         <PagesList />
-        {/* <Editor /> */}
+        <Editor />
       </div>
     </>
   )
