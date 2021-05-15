@@ -5,7 +5,7 @@ import { MsalProvider } from '@azure/msal-react'
 import { Provider } from 'react-redux'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import { msalInstance } from './lib/azureConfig'
+import { msalInstance } from './lib/authService'
 import store from './lib/store'
 
 ReactDOM.render(

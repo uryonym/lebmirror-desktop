@@ -4,7 +4,7 @@ import {
   SilentRequest,
 } from '@azure/msal-browser'
 
-const azureConfig: Configuration = {
+const authService: Configuration = {
   auth: {
     clientId: process.env.REACT_APP_AZURE_CLIENT_ID as string,
     authority: `https://login.microsoftonline.com/${
@@ -13,7 +13,7 @@ const azureConfig: Configuration = {
   },
 }
 
-export const msalInstance = new PublicClientApplication(azureConfig)
+export const msalInstance = new PublicClientApplication(authService)
 
 export const getToken = async (): Promise<string> => {
   const account = msalInstance.getAllAccounts()
