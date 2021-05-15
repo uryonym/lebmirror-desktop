@@ -1,12 +1,20 @@
 import React from 'react'
-import { Container, Jumbotron } from 'react-bootstrap'
+import {
+  AuthenticatedTemplate,
+  UnauthenticatedTemplate,
+} from '@azure/msal-react'
+import Home from './components/Home'
+import Login from './components/Login'
 
 const App: React.VFC = () => (
-  <Container className="p-3">
-    <Jumbotron>
-      <h1>welcome to lebmirror</h1>
-    </Jumbotron>
-  </Container>
+  <>
+    <AuthenticatedTemplate>
+      <Home />
+    </AuthenticatedTemplate>
+    <UnauthenticatedTemplate>
+      <Login />
+    </UnauthenticatedTemplate>
+  </>
 )
 
 export default App
