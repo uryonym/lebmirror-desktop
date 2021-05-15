@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { OnenotePage } from 'microsoft-graph'
-import { getPages } from '../../lib/graphService'
+import { getPages, postPage } from '../../lib/graphService'
 import { RootState } from '../../lib/rootReducer'
 import { AppThunk } from '../../lib/store'
 
@@ -19,10 +19,13 @@ export const pageSlice = createSlice({
     setPages: (state, action: PayloadAction<OnenotePage[]>) => {
       state.pages = action.payload
     },
+    addNewPage: (state, action: PayloadAction<OnenotePage>) => {
+      state.pages.push(action.payload)
+    },
   },
 })
 
-export const { setPages } = pageSlice.actions
+export const { setPages, addNewPage } = pageSlice.actions
 export default pageSlice.reducer
 
 export const selectPage = (state: RootState): PageState => state.pages
@@ -33,6 +36,17 @@ export const fetchPageList =
     try {
       const pages = await getPages(sectionId)
       dispatch(setPages(pages))
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+export const createPage =
+  (sectionId: string, pageName: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const newPage = await postPage(sectionId, pageName)
+      dispatch(addNewPage(newPage))
     } catch (e) {
       console.log(e)
     }

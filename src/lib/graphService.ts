@@ -59,3 +59,18 @@ export const getPages = async (sectionId: string): Promise<OnenotePage[]> => {
     .get()
   return res.value as Promise<OnenotePage[]>
 }
+
+export const postPage = async (
+  sectionId: string,
+  pageName: string
+): Promise<OnenotePage> => {
+  const client = await getAuthClient()
+  const html = `<!DOCTYPE html><html lang="ja"><head><title>${pageName}</title></head><body></body></html>`
+  console.log(html)
+  const response = await client
+    .api(`/me/onenote/sections/${sectionId}/pages`)
+    .header('Content-Type', 'application/xhtml+xml')
+    .post(html)
+  console.log(response)
+  return response as Promise<OnenotePage>
+}
