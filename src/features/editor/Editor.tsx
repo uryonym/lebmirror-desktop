@@ -5,6 +5,7 @@ import { schema } from 'prosemirror-schema-basic'
 import { EditorView } from 'prosemirror-view'
 import { history, redo, undo } from 'prosemirror-history'
 import { keymap } from 'prosemirror-keymap'
+import { baseKeymap } from 'prosemirror-commands'
 
 const Editor: React.VFC = () => {
   const pmEditor = useRef<HTMLDivElement>(null)
@@ -13,7 +14,11 @@ const Editor: React.VFC = () => {
     if (pmEditor.current) {
       const state = EditorState.create({
         schema,
-        plugins: [history(), keymap({ 'Mod-z': undo, 'Mod-y': redo })],
+        plugins: [
+          history(),
+          keymap({ 'Mod-z': undo, 'Mod-y': redo }),
+          keymap(baseKeymap),
+        ],
       })
       const view = new EditorView(pmEditor.current, {
         state,
