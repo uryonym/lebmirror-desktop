@@ -1,17 +1,41 @@
 import ContentEditable from 'react-contenteditable'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import { EditorState } from 'prosemirror-state'
+import { schema } from 'prosemirror-schema-basic'
+import { EditorView } from 'prosemirror-view'
 
-const Editor: React.VFC = () => (
-  <div className="editor">
-    <ContentEditable
-      className="title"
-      onChange={() => console.log('change title')}
-      html="This is Sample Title."
-    />
-    <div className="page-body">
-      <p>this is editor area.</p>
+const Editor: React.VFC = () => {
+  const pmEditor = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (pmEditor.current) {
+      const state = EditorState.create({ schema })
+      const view = new EditorView(pmEditor.current, {
+        state,
+        dispatchTransaction(transaction) {
+          console.log(
+            'Document size went from',
+            transaction.before.content.size,
+            'to',
+            transaction.doc.content.size
+          )
+          const newState = view.state.apply(transaction)
+          view.updateState(newState)
+        },
+      })
+    }
+  }, [])
+
+  return (
+    <div className="editor">
+      <ContentEditable
+        className="title"
+        onChange={() => console.log('change title')}
+        html="This is Sample Title."
+      />
+      <div className="page-body" ref={pmEditor} />
     </div>
-  </div>
-)
+  )
+}
 
 export default Editor
