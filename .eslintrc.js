@@ -52,6 +52,7 @@ module.exports = {
     ],
     'no-param-reassign': [2, { props: false }],
     'import/no-unresolved': 'off',
+    'react-hooks/exhaustive-deps': 'off',
   },
   settings: {
     'import/resolver': {
