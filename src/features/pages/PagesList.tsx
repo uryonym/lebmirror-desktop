@@ -3,7 +3,12 @@ import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectSection } from '../sections/sectionSlice'
-import { createPage, selectPage } from './pageSlice'
+import {
+  createPage,
+  fetchPageContent,
+  selectPage,
+  setPageId,
+} from './pageSlice'
 
 const PagesList: React.VFC = () => {
   const dispatch = useDispatch()
@@ -13,6 +18,12 @@ const PagesList: React.VFC = () => {
   const [show, setShow] = useState(false)
   const [newPageName, setNewPageName] = useState('')
 
+  const handlePageList = (pageId: string | undefined) => () => {
+    dispatch(setPageId(pageId))
+    if (pageId) {
+      dispatch(fetchPageContent(pageId))
+    }
+  }
   const handleClose = () => setShow(false)
   const handleOpen = () => setShow(true)
   const handleChangePageName = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +52,12 @@ const PagesList: React.VFC = () => {
             const lists: any[] = []
             pages.forEach((page) => {
               lists.push(
-                <ListGroup.Item key={page.id} action className="list-item">
+                <ListGroup.Item
+                  key={page.id}
+                  action
+                  onClick={handlePageList(page.id)}
+                  className="list-item"
+                >
                   {page.title}
                 </ListGroup.Item>
               )

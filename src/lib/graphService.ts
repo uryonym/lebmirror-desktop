@@ -65,7 +65,7 @@ export const postPage = async (
   pageName: string
 ): Promise<OnenotePage> => {
   const client = await getAuthClient()
-  const html = `<!DOCTYPE html><html lang="ja"><head><title>${pageName}</title></head><body></body></html>`
+  const html = `<!DOCTYPE html><html><head><title>${pageName}</title></head><body></body></html>`
   console.log(html)
   const response = await client
     .api(`/me/onenote/sections/${sectionId}/pages`)
@@ -73,4 +73,28 @@ export const postPage = async (
     .post(html)
   console.log(response)
   return response as Promise<OnenotePage>
+}
+
+export const getPageContent = async (pageId: string): Promise<string> => {
+  const client = await getAuthClient()
+  const response: ReadableStream = await client
+    .api(`/me/onenote/pages/${pageId}/content?includeIDs=true`)
+    .getStream()
+  const reader = response.getReader()
+  const stream = new ReadableStream({
+    async start(controller) {
+      while (true) {
+        // eslint-disable-next-line no-await-in-loop
+        const { done, value } = await reader.read()
+        if (done) {
+          break
+        }
+        controller.enqueue(value)
+      }
+      controller.close()
+      reader.releaseLock()
+    },
+  })
+  // eslint-disable-next-line no-return-await
+  return await new Response(stream).text()
 }
