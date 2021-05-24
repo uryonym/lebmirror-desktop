@@ -81,7 +81,7 @@ const Editor: React.VFC = () => {
   }, [pageContent])
 
   return (
-    <div className="editor">
+    <div className="editor d-flex flex-column">
       <ContentEditable
         className="title"
         onChange={() => console.log('change title')}

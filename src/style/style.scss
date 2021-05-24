@@ -48,13 +48,26 @@ $header-height: 60px;
 }
 
 .editor {
-  padding: 10px 15px;
   flex: 1;
 
   .title {
     font-size: 2em;
-    margin-bottom: 30px;
+    margin: 10px 15px 10px 15px;
+    //padding: 10px 15px 0 15px;
     outline: 0 solid transparent;
     border-bottom: 1px solid #adadad;
+  }
+
+  .page-body {
+    flex: 1;
+    overflow: auto;
+    padding: 20px 15px 0 15px;
+    margin-bottom: 10px;
+  }
+
+  .ProseMirror {
+    height: 100%;
+    outline: 0 solid transparent;
+    margin-bottom: 20px;
   }
 }
