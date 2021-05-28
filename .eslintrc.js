@@ -21,10 +21,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: ['./tsconfig.json'],
   },
-  plugins: [
-    'react',
-    '@typescript-eslint',
-  ],
+  plugins: ['react', '@typescript-eslint'],
   rules: {
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
@@ -53,6 +50,7 @@ module.exports = {
     'no-param-reassign': [2, { props: false }],
     'import/no-unresolved': 'off',
     'react-hooks/exhaustive-deps': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off'
   },
   settings: {
     'import/resolver': {
@@ -62,4 +60,4 @@ module.exports = {
       },
     },
   },
-};
+}
