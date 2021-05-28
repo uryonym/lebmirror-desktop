@@ -1,4 +1,4 @@
-import ContentEditable from 'react-contenteditable'
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
 import React, { useEffect, useRef, useState } from 'react'
 import { EditorState } from 'prosemirror-state'
 import { schema } from 'prosemirror-schema-basic'
@@ -6,25 +6,35 @@ import { EditorView } from 'prosemirror-view'
 import { history, redo, undo } from 'prosemirror-history'
 import { keymap } from 'prosemirror-keymap'
 import { baseKeymap } from 'prosemirror-commands'
-import { useSelector } from 'react-redux'
-import { DOMParser as PmDOMParser, Node as PmNode } from 'prosemirror-model'
-import { selectPage } from '../pages/pageSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  DOMParser as PmDOMParser,
+  DOMSerializer,
+  Node as PmNode,
+} from 'prosemirror-model'
+import { Button } from 'react-bootstrap'
+import { selectPage, updatePageContent } from '../pages/pageSlice'
 
 const Editor: React.VFC = () => {
   const pmEditor = useRef<HTMLDivElement>(null)
   const eView = useRef<EditorView | null>(null)
-  const { pageContent } = useSelector(selectPage)
+  const { currentPageId, pageContent } = useSelector(selectPage)
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
+  const [divId, setDivId] = useState<string | undefined>('')
+  const dispatch = useDispatch()
 
   const createDocument = (content?: string): PmNode<any> | undefined => {
     const tmpEl = document.createElement('div')
     if (content) {
       tmpEl.innerHTML = content
-      if (tmpEl.firstElementChild) {
-        return PmDOMParser.fromSchema(schema).parse(tmpEl.firstElementChild)
+      const tmpFirstEl = tmpEl.firstElementChild
+      if (tmpFirstEl) {
+        setDivId(tmpFirstEl.id)
+        return PmDOMParser.fromSchema(schema).parse(tmpFirstEl)
       }
     }
+    setDivId(undefined)
     return undefined
   }
 
@@ -46,15 +56,16 @@ const Editor: React.VFC = () => {
       eView.current = new EditorView(ele, {
         state: createEditorState(),
         dispatchTransaction(transaction) {
-          console.log(
-            'Document size went from',
-            transaction.before.content.size,
-            'to',
-            transaction.doc.content.size
-          )
           if (eView.current) {
             const newState = eView.current.state.apply(transaction)
             eView.current.updateState(newState)
+
+            const fragment = newState.doc.content
+            const docHtml =
+              DOMSerializer.fromSchema(schema).serializeFragment(fragment)
+            const container = document.createElement('article')
+            container.appendChild(docHtml)
+            setBody(container.innerHTML)
           }
         },
       })
@@ -80,11 +91,22 @@ const Editor: React.VFC = () => {
     }
   }, [pageContent])
 
+  const handleSave = () => {
+    if (currentPageId) {
+      dispatch(updatePageContent(currentPageId, title, divId, body))
+    }
+  }
+
   return (
     <div className="editor d-flex flex-column">
+      <div className="menubar">
+        <Button variant="info" onClick={handleSave}>
+          Save
+        </Button>
+      </div>
       <ContentEditable
         className="title"
-        onChange={() => console.log('change title')}
+        onChange={(event: ContentEditableEvent) => setTitle(event.target.value)}
         html={title}
       />
       <div className="page-body" ref={pmEditor} />

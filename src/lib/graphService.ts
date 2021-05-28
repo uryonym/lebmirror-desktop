@@ -2,6 +2,7 @@
 import * as graph from '@microsoft/microsoft-graph-client'
 import { Notebook, OnenotePage, OnenoteSection } from 'microsoft-graph'
 import { getToken } from './authService'
+import { UpdateContent } from '../features/pages/pageSlice'
 
 const getAuthClient = async () => {
   const token = await getToken()
@@ -97,4 +98,14 @@ export const getPageContent = async (pageId: string): Promise<string> => {
   })
   // eslint-disable-next-line no-return-await
   return await new Response(stream).text()
+}
+
+export const patchPageContent = async (
+  pageId: string,
+  stream: UpdateContent[]
+) => {
+  const client = await getAuthClient()
+  await client
+    .api(`/me/onenote/pages/${pageId}/content`)
+    .patch(JSON.stringify(stream))
 }

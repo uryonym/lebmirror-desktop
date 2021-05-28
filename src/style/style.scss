@@ -50,6 +50,10 @@ $header-height: 60px;
 .editor {
   flex: 1;
 
+  .menubar {
+    margin: 10px 15px 10px 15px;
+  }
+
   .title {
     font-size: 2em;
     margin: 10px 15px 10px 15px;

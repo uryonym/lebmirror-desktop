@@ -1,8 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { OnenotePage } from 'microsoft-graph'
-import { getPageContent, getPages, postPage } from '../../lib/graphService'
+import {
+  getPageContent,
+  getPages,
+  patchPageContent,
+  postPage,
+} from '../../lib/graphService'
 import { RootState } from '../../lib/rootReducer'
 import { AppThunk } from '../../lib/store'
+
+export interface UpdateContent {
+  target: string
+  action: string
+  content: string
+}
 
 type PageState = {
   pages: OnenotePage[]
@@ -69,6 +80,42 @@ export const fetchPageContent =
     try {
       const page = await getPageContent(pageId)
       dispatch(setPageContent(page))
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+export const updatePageContent =
+  (
+    pageId: string,
+    title: string,
+    divId: string | undefined,
+    body: string
+  ): AppThunk =>
+  async (dispatch) => {
+    try {
+      const stream: UpdateContent[] = []
+      // タイトルの設定
+      stream.push({
+        target: 'title',
+        action: 'replace',
+        content: title,
+      })
+      // ボディの設定
+      if (divId) {
+        stream.push({
+          target: divId,
+          action: 'replace',
+          content: body,
+        })
+      } else {
+        stream.push({
+          target: 'body',
+          action: 'append',
+          content: body,
+        })
+      }
+      await patchPageContent(pageId, stream)
     } catch (e) {
       console.log(e)
     }
