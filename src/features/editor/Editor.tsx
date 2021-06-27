@@ -1,18 +1,18 @@
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
-import React, { useEffect, useRef, useState } from 'react'
-import { EditorState } from 'prosemirror-state'
-import { schema } from 'prosemirror-schema-basic'
-import { EditorView } from 'prosemirror-view'
+import { baseKeymap } from 'prosemirror-commands'
 import { history, redo, undo } from 'prosemirror-history'
 import { keymap } from 'prosemirror-keymap'
-import { baseKeymap } from 'prosemirror-commands'
-import { useDispatch, useSelector } from 'react-redux'
 import {
   DOMParser as PmDOMParser,
   DOMSerializer,
-  Node as PmNode,
+  Node as PmNode
 } from 'prosemirror-model'
+import { EditorState } from 'prosemirror-state'
+import { EditorView } from 'prosemirror-view'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
+import { useDispatch, useSelector } from 'react-redux'
+import { schema } from '../../lib/prosemirror/schema'
 import { selectPage, updatePageContent } from '../pages/pageSlice'
 
 const Editor: React.VFC = () => {
