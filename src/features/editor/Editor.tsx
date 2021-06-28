@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
 import { useDispatch, useSelector } from 'react-redux'
-import { schema } from '../../lib/prosemirror/schema'
+import schema from '../../lib/prosemirror/schema'
 import { selectPage, updatePageContent } from '../pages/pageSlice'
 
 const Editor: React.VFC = () => {
@@ -73,13 +73,11 @@ const Editor: React.VFC = () => {
   }
 
   useEffect(() => {
-    console.log('初回レンダー時のみ実行')
     createEditorView(pmEditor.current)
     return () => eView.current?.destroy()
   }, [])
 
   useEffect(() => {
-    console.log('pageContentの値に応じて実行')
     if (pageContent) {
       const document = new DOMParser().parseFromString(pageContent, 'text/html')
       setTitle(document.title)

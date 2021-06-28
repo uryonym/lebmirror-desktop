@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { DOMOutputSpec, MarkSpec, NodeSpec, Schema } from 'prosemirror-model'
+import { tableNodes } from 'prosemirror-tables'
 
 const pDOM: DOMOutputSpec = ['p', 0]
 const preDOM: DOMOutputSpec = ['pre', ['code', 0]]
 const brDOM: DOMOutputSpec = ['br']
-export const nodes: { [name in string]: NodeSpec } = {
+const nodes: { [name in string]: NodeSpec } = {
   doc: {
     content: 'block+',
   },
@@ -65,7 +67,7 @@ export const nodes: { [name in string]: NodeSpec } = {
 const emDOM: DOMOutputSpec = ['em', 0]
 const strongDOM: DOMOutputSpec = ['strong', 0]
 const codeDOM: DOMOutputSpec = ['code', 0]
-export const marks: { [name in string]: MarkSpec } = {
+const marks: { [name in string]: MarkSpec } = {
   link: {
     attrs: {
       href: {},
@@ -121,4 +123,13 @@ export const marks: { [name in string]: MarkSpec } = {
   },
 }
 
-export const schema = new Schema({ nodes, marks })
+const tableNode = tableNodes({
+  tableGroup: 'block',
+  cellContent: 'block+',
+  cellAttributes: {},
+})
+
+Object.assign(nodes, tableNode)
+
+const schema = new Schema({ nodes, marks })
+export default schema
