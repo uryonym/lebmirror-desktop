@@ -1,3 +1,5 @@
+/* eslint-disable no-cond-assign */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -40,16 +42,16 @@ const codeBlockRule = (nodeType: NodeType): InputRule =>
 const markdownInputRules = (schema: Schema): Plugin<unknown, any> => {
   const rules = smartQuotes.concat(ellipsis, emDash)
   let type
-  if (type === schema.nodes.heading) {
+  if ((type = schema.nodes.heading)) {
     rules.push(headingRule(type, 3))
   }
-  if (type === schema.nodes.ordered_list) {
+  if ((type = schema.nodes.ordered_list)) {
     rules.push(orderedListRule(type))
   }
-  if (type === schema.nodes.bullet_list) {
+  if ((type = schema.nodes.bullet_list)) {
     rules.push(bulletListRule(type))
   }
-  if (type === schema.nodes.code_block) {
+  if ((type = schema.nodes.code_block)) {
     rules.push(codeBlockRule(type))
   }
   return inputRules({ rules })

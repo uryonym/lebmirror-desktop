@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   DOMParser as PmDOMParser,
   DOMSerializer,
-  Node as PmNode
+  Node as PmNode,
 } from 'prosemirror-model'
 import { EditorState } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
