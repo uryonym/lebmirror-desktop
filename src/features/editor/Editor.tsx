@@ -1,6 +1,3 @@
-import { baseKeymap } from 'prosemirror-commands'
-import { history, redo, undo } from 'prosemirror-history'
-import { keymap } from 'prosemirror-keymap'
 import {
   DOMParser as PmDOMParser,
   DOMSerializer,
@@ -12,6 +9,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
 import { useDispatch, useSelector } from 'react-redux'
+import pmPlugins from '../../lib/prosemirror/pmPlugins'
 import schema from '../../lib/prosemirror/schema'
 import { selectPage, updatePageContent } from '../pages/pageSlice'
 
@@ -43,11 +41,7 @@ const Editor: React.VFC = () => {
     return EditorState.create({
       schema,
       doc,
-      plugins: [
-        history(),
-        keymap({ 'Mod-z': undo, 'Mod-y': redo }),
-        keymap(baseKeymap),
-      ],
+      plugins: pmPlugins(schema),
     })
   }
 
