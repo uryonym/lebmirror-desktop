@@ -59,6 +59,8 @@
     "@types/microsoft-graph": "1.41.0",
     "@types/node": "^14.17.4",
     "@types/prosemirror-commands": "^1.0.4",
+    "@types/prosemirror-dropcursor": "^1.0.1",
+    "@types/prosemirror-gapcursor": "^1.0.3",
     "@types/prosemirror-history": "^1.0.2",
     "@types/prosemirror-keymap": "^1.0.4",
     "@types/prosemirror-model": "^1.13.0",
